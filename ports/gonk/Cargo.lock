@@ -65,7 +65,7 @@ dependencies = [
  "png 0.1.0 (git+https://github.com/servo/rust-png)",
  "script_traits 0.0.1",
  "time 0.1.0 (git+https://github.com/rust-lang/time)",
- "url 0.1.0 (git+https://github.com/servo/rust-url)",
+ "url 0.2.4 (git+https://github.com/servo/rust-url)",
  "util 0.0.1",
 ]
 
@@ -76,7 +76,7 @@ source = "git+https://github.com/servo/cookie-rs#f82090b19c2738b90528167ef873d8e
 dependencies = [
  "openssl 0.0.1 (git+https://github.com/servo/rust-openssl)",
  "time 0.1.0 (git+https://github.com/rust-lang/time)",
- "url 0.1.0 (git+https://github.com/servo/rust-url)",
+ "url 0.2.4 (git+https://github.com/servo/rust-url)",
 ]
 
 [[package]]
@@ -230,7 +230,7 @@ dependencies = [
  "stb_image 0.1.0 (git+https://github.com/servo/rust-stb-image)",
  "style 0.0.1",
  "time 0.1.0 (git+https://github.com/rust-lang/time)",
- "url 0.1.0 (git+https://github.com/servo/rust-url)",
+ "url 0.2.4 (git+https://github.com/servo/rust-url)",
  "util 0.0.1",
 ]
 
@@ -299,7 +299,7 @@ dependencies = [
  "openssl 0.0.1 (git+https://github.com/servo/rust-openssl)",
  "typeable 0.0.3 (git+https://github.com/reem/rust-typeable)",
  "unsafe-any 0.1.1 (git+https://github.com/reem/rust-unsafe-any)",
- "url 0.1.0 (git+https://github.com/servo/rust-url)",
+ "url 0.2.4 (git+https://github.com/servo/rust-url)",
 ]
 
 [[package]]
@@ -357,7 +357,7 @@ dependencies = [
  "string_cache 0.0.0 (git+https://github.com/servo/string-cache)",
  "string_cache_macros 0.0.0 (git+https://github.com/servo/string-cache)",
  "style 0.0.1",
- "url 0.1.0 (git+https://github.com/servo/rust-url)",
+ "url 0.2.4 (git+https://github.com/servo/rust-url)",
  "util 0.0.1",
 ]
 
@@ -411,7 +411,7 @@ dependencies = [
  "io_surface 0.1.0 (git+https://github.com/servo/rust-io-surface)",
  "layers 0.1.0 (git+https://github.com/servo/rust-layers)",
  "style 0.0.1",
- "url 0.1.0 (git+https://github.com/servo/rust-url)",
+ "url 0.2.4 (git+https://github.com/servo/rust-url)",
  "util 0.0.1",
 ]
 
@@ -424,7 +424,7 @@ dependencies = [
  "png 0.1.0 (git+https://github.com/servo/rust-png)",
  "stb_image 0.1.0 (git+https://github.com/servo/rust-stb-image)",
  "time 0.1.0 (git+https://github.com/rust-lang/time)",
- "url 0.1.0 (git+https://github.com/servo/rust-url)",
+ "url 0.2.4 (git+https://github.com/servo/rust-url)",
  "util 0.0.1",
 ]
 
@@ -514,7 +514,7 @@ dependencies = [
  "string_cache_macros 0.0.0 (git+https://github.com/servo/string-cache)",
  "style 0.0.1",
  "time 0.1.0 (git+https://github.com/rust-lang/time)",
- "url 0.1.0 (git+https://github.com/servo/rust-url)",
+ "url 0.2.4 (git+https://github.com/servo/rust-url)",
  "util 0.0.1",
  "uuid 0.0.1 (git+https://github.com/rust-lang/uuid)",
 ]
@@ -527,7 +527,7 @@ dependencies = [
  "geom 0.1.0 (git+https://github.com/servo/rust-geom)",
  "msg 0.0.1",
  "net 0.0.1",
- "url 0.1.0 (git+https://github.com/servo/rust-url)",
+ "url 0.2.4 (git+https://github.com/servo/rust-url)",
  "util 0.0.1",
 ]
 
@@ -542,7 +542,7 @@ dependencies = [
  "net 0.0.1",
  "script 0.0.1",
  "time 0.1.0 (git+https://github.com/rust-lang/time)",
- "url 0.1.0 (git+https://github.com/servo/rust-url)",
+ "url 0.2.4 (git+https://github.com/servo/rust-url)",
  "util 0.0.1",
 ]
 
@@ -591,7 +591,7 @@ dependencies = [
  "plugins 0.0.1",
  "string_cache 0.0.0 (git+https://github.com/servo/string-cache)",
  "string_cache_macros 0.0.0 (git+https://github.com/servo/string-cache)",
- "url 0.1.0 (git+https://github.com/servo/rust-url)",
+ "url 0.2.4 (git+https://github.com/servo/rust-url)",
  "util 0.0.1",
 ]
 
@@ -619,8 +619,8 @@ source = "git+https://github.com/reem/rust-unsafe-any#eb3fe87bea85f375b8fcefa0cd
 
 [[package]]
 name = "url"
-version = "0.1.0"
-source = "git+https://github.com/servo/rust-url#46458f80e48c542b2f175e36e5b7d30782ca7dc5"
+version = "0.2.4"
+source = "git+https://github.com/servo/rust-url#79f8034a8e1815ffa1f49204572ddbf6eb747c75"
 
 [[package]]
 name = "util"
@@ -633,7 +633,7 @@ dependencies = [
  "string_cache_macros 0.0.0 (git+https://github.com/servo/string-cache)",
  "task_info 0.0.1",
  "time 0.1.0 (git+https://github.com/rust-lang/time)",
- "url 0.1.0 (git+https://github.com/servo/rust-url)",
+ "url 0.2.4 (git+https://github.com/servo/rust-url)",
 ]
 
 [[package]]
