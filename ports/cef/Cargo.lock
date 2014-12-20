@@ -576,7 +576,7 @@ dependencies = [
  "time 0.1.0 (git+https://github.com/rust-lang/time)",
  "url 0.2.4 (git+https://github.com/servo/rust-url)",
  "util 0.0.1",
- "uuid 0.0.2 (git+https://github.com/rust-lang/uuid)",
+ "uuid 0.1.1 (git+https://github.com/rust-lang/uuid)",
 ]
 
 [[package]]
@@ -699,8 +699,8 @@ dependencies = [
 
 [[package]]
 name = "uuid"
-version = "0.0.2"
-source = "git+https://github.com/rust-lang/uuid#f5d94d0043a615756edefaf9c6041f11e52b8370"
+version = "0.1.1"
+source = "git+https://github.com/rust-lang/uuid#df1870b56cf22366367f4767769498a301045fdb"
 
 [[package]]
 name = "xlib"
