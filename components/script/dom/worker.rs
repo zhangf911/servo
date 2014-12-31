@@ -83,8 +83,9 @@ impl Worker {
     pub fn handle_message(address: TrustedWorkerAddress,
                           data: *mut u64, nbytes: size_t) {
         let worker = address.to_temporary().root();
+        let worker = worker.r();
 
-        let global = worker.r().global.root();
+        let global = worker.global.root();
 
         let mut message = UndefinedValue();
         unsafe {

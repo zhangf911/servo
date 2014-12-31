@@ -56,7 +56,7 @@ impl BrowserContext {
         let WindowProxyHandler(handler) = js_info.as_ref().unwrap().dom_static.windowproxy_handler;
         assert!(handler.is_not_null());
 
-        let parent = win.r().reflector().get_jsobject();
+        let parent = win.reflector().get_jsobject();
         let cx = js_info.as_ref().unwrap().js_context.ptr;
         let wrapper = with_compartment(cx, parent, || unsafe {
             WrapperNew(cx, parent, handler)
