@@ -1222,7 +1222,7 @@ impl ScriptTask {
                     let temp_node =
                         node::from_untrusted_node_address(self.js_runtime.ptr, *node_address);
 
-                    let maybe_node = temp_node.root().ancestors().find(|node| node.is_element());
+                    let maybe_node = temp_node.root().r().ancestors().find(|node| node.is_element());
                     match maybe_node {
                         Some(node) => {
                             node.set_hover_state(true);
