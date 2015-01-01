@@ -13,7 +13,7 @@ use dom::bindings::codegen::Bindings::NodeFilterBinding::NodeFilter;
 // use dom::bindings::codegen::Bindings::NodeFilterBinding::NodeFilterConstants;
 use dom::bindings::error::{ErrorResult, Fallible};
 use dom::bindings::global::GlobalRef;
-use dom::bindings::js::{JS, JSRef, OptionalRootable, Temporary, MutHeap};
+use dom::bindings::js::{JS, JSRef, Root, OptionalRootable, Temporary, MutHeap};
 use dom::bindings::utils::{Reflector, reflect_dom_object};
 use dom::document::{Document, DocumentHelpers};
 use dom::node::{Node, NodeHelpers};
@@ -147,7 +147,7 @@ impl<'a> PrivateTreeWalkerHelpers<'a> for JSRef<'a, TreeWalker> {
         // "1. Let node be the value of the currentNode attribute."
         // "2. Set node to node's first child if type is first, and node's last child if type is last."
         let cur = self.current_node.get().root();
-        let mut node_op: Option<JSRef<Node>> = next_child(*cur).map(|node| node.root().clone());
+        let mut node_op: Option<Root<Node>> = next_child(cur.r()).root();
 
         // 3. Main: While node is not null, run these substeps:
         'main: loop {
@@ -155,22 +155,22 @@ impl<'a> PrivateTreeWalkerHelpers<'a> for JSRef<'a, TreeWalker> {
                 None => break,
                 Some(node) => {
                     // "1. Filter node and let result be the return value."
-                    match self.accept_node(node) {
+                    match self.accept_node(node.r()) {
                         Err(e) => return Err(e),
                         // "2. If result is FILTER_ACCEPT, then set the currentNode
                         //     attribute to node and return node."
                         Ok(NodeFilterConstants::FILTER_ACCEPT) => {
-                            self.current_node.set(JS::from_rooted(node));
-                            return Ok(Some(Temporary::from_rooted(node)))
+                            self.current_node.set(JS::from_rooted(node.r()));
+                            return Ok(Some(Temporary::from_rooted(node.r())))
                         },
                         // "3. If result is FILTER_SKIP, run these subsubsteps:"
                         Ok(NodeFilterConstants::FILTER_SKIP) => {
                             // "1. Let child be node's first child if type is first,
                             //     and node's last child if type is last."
-                            match next_child(node) {
+                            match next_child(node.r()) {
                                 // "2. If child is not null, set node to child and goto Main."
                                 Some(child) => {
-                                    node_op = Some(child.root().clone());
+                                    node_op = Some(child.root());
                                     continue 'main
                                 },
                                 None => {}
@@ -185,22 +185,22 @@ impl<'a> PrivateTreeWalkerHelpers<'a> for JSRef<'a, TreeWalker> {
                             Some(node) => {
                                 // "1. Let sibling be node's next sibling if type is next,
                                 //     and node's previous sibling if type is previous."
-                                match next_sibling(node) {
+                                match next_sibling(node.r()) {
                                     // "2. If sibling is not null,
                                     //     set node to sibling and goto Main."
                                     Some(sibling) => {
-                                        node_op = Some(sibling.root().clone());
+                                        node_op = Some(sibling.root());
                                         continue 'main
                                     },
                                     None => {
                                         // "3. Let parent be node's parent."
-                                        match node.parent_node().map(|p| p.root().clone()) {
+                                        match node.parent_node().root() {
                                             // "4. If parent is null, parent is root,
                                             //     or parent is currentNode attribute's value,
                                             //     return null."
                                             None => return Ok(None),
-                                            Some(parent) if self.is_root_node(parent)
-                                                            || self.is_current_node(parent) =>
+                                            Some(ref parent) if self.is_root_node(parent.r())
+                                                            || self.is_current_node(parent.r()) =>
                                                              return Ok(None),
                                             // "5. Otherwise, set node to parent."
                                             Some(parent) => node_op = Some(parent)
