@@ -525,12 +525,6 @@ impl<T: Reflectable> Drop for Root<T> {
     }
 }
 
-impl<'b, T: Reflectable> Deref<JSRef<'b, T>> for Root<T> {
-    fn deref<'c>(&'c self) -> &'c JSRef<'b, T> {
-        &self.jsref
-    }
-}
-
 impl<'a, T: Reflectable> Deref<T> for JSRef<'a, T> {
     fn deref<'b>(&'b self) -> &'b T {
         unsafe {
