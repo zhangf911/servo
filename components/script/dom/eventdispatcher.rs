@@ -30,8 +30,7 @@ pub fn dispatch_event<'a, 'b>(target: JSRef<'a, EventTarget>,
     let mut chain: Vec<Root<EventTarget>> = if target.is_node() {
         let target_node: JSRef<Node> = NodeCast::to_ref(target).unwrap();
         target_node.ancestors().map(|ancestor| {
-            let ancestor_target: JSRef<EventTarget> = EventTargetCast::from_ref(ancestor);
-            JS::from_rooted(ancestor_target).root()
+            EventTargetCast::from_temporary(ancestor).root()
         }).collect()
     } else {
         vec!()

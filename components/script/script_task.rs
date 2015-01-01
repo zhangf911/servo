@@ -1132,12 +1132,20 @@ impl ScriptTask {
                             self.js_runtime.ptr, node_address).root();
 
                 let maybe_node = match ElementCast::to_ref(temp_node.r()) {
-                    Some(element) => Some(element),
-                    None => temp_node.r().ancestors().filter_map(ElementCast::to_ref).next(),
-                };
+                    Some(element) => Some(Temporary::from_rooted(element)),
+                    None => {
+                        temp_node.r()
+                                 .ancestors()
+                                 .map(|a| a.root())
+                                 .filter_map(|a| ElementCast::to_ref(a.r()))
+                                 .next()
+                                 .map(Temporary::from_rooted)
+                    },
+                }.root();
 
                 match maybe_node {
                     Some(el) => {
+                        let el = el.r();
                         let node = NodeCast::from_ref(el);
                         debug!("clicked on {:s}", node.debug_str());
                         // Prevent click event if form control element is disabled.
@@ -1220,11 +1228,17 @@ impl ScriptTask {
 
                 for node_address in node_address.iter() {
                     let temp_node =
-                        node::from_untrusted_node_address(self.js_runtime.ptr, *node_address);
+                        node::from_untrusted_node_address(self.js_runtime.ptr, *node_address).root();
 
-                    let maybe_node = temp_node.root().ancestors().find(|node| node.is_element());
+                    let maybe_node =
+                        temp_node.r()
+                                 .ancestors()
+                                 .map(|a| a.root())
+                                 .filter_map(|a| ElementCast::to_ref(a.r()))
+                                 .next();
                     match maybe_node {
                         Some(node) => {
+                            let node = NodeCast::from_ref(node);
                             node.set_hover_state(true);
                             match *mouse_over_targets {
                                 Some(ref mouse_over_targets) if !target_compare => {

@@ -392,7 +392,7 @@ impl<'a> Iterator<JSRef<'a, Node>> for QuerySelectorIterator<'a> {
 }
 
 pub trait NodeHelpers<'a> {
-    fn ancestors(self) -> AncestorIterator<'a>;
+    fn ancestors(self) -> AncestorIterator;
     fn children(self) -> NodeChildrenIterator<'a>;
     fn rev_children(self) -> ReverseChildrenIterator<'a>;
     fn child_elements(self) -> ChildElementIterator<'a>;
@@ -787,9 +787,9 @@ impl<'a> NodeHelpers<'a> for JSRef<'a, Node> {
     }
 
 
-    fn ancestors(self) -> AncestorIterator<'a> {
+    fn ancestors(self) -> AncestorIterator {
         AncestorIterator {
-            current: self.parent_node.get().map(|node| (*node.root()).clone()),
+            current: self.get_parent_node().root(),
         }
     }
 
@@ -1028,14 +1028,14 @@ impl<'a> Iterator<JSRef<'a, Node>> for ReverseChildrenIterator<'a> {
     }
 }
 
-pub struct AncestorIterator<'a> {
-    current: Option<JSRef<'a, Node>>,
+pub struct AncestorIterator {
+    current: Option<Root<Node>>,
 }
 
-impl<'a> Iterator<JSRef<'a, Node>> for AncestorIterator<'a> {
-    fn next(&mut self) -> Option<JSRef<'a, Node>> {
-        let node = self.current;
-        self.current = node.and_then(|node| node.parent_node().map(|node| *node.root().deref()));
+impl Iterator<Temporary<Node>> for AncestorIterator {
+    fn next(&mut self) -> Option<Temporary<Node>> {
+        let node = Temporary::from_rooted(self.current.r());
+        self.current = self.current.r().and_then(|n| n.parent_node()).root();
         node
     }
 }
