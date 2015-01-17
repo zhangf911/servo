@@ -14,6 +14,7 @@ use servo_util::bloom::BloomFilter;
 use servo_util::cache::{Cache, LRUCache, SimpleHashCache};
 use servo_util::smallvec::{SmallVec, SmallVec16};
 use servo_util::arc_ptr_eq;
+use std::borrow::BorrowFrom;
 use std::mem;
 use std::hash::{Hash, sip};
 use std::slice::Items;
@@ -64,46 +65,20 @@ impl ApplicableDeclarationsCacheEntry {
 
 impl PartialEq for ApplicableDeclarationsCacheEntry {
     fn eq(&self, other: &ApplicableDeclarationsCacheEntry) -> bool {
-        let this_as_query = ApplicableDeclarationsCacheQuery::new(self.declarations.as_slice());
-        this_as_query.equiv(other)
+        self.declarations
+            .iter()
+            .zip(other.declarations.iter())
+            .all(|(t, o)| arc_ptr_eq(&t.declarations, &o.declarations))
+    }
+}
+
+impl BorrowFrom<ApplicableDeclarationsCacheEntry> for [DeclarationBlock] {
+    fn borrow_from(entry: &ApplicableDeclarationsCacheEntry) -> &[DeclarationBlock] {
+        &*entry.declarations
     }
 }
 
 impl Hash for ApplicableDeclarationsCacheEntry {
-    fn hash(&self, state: &mut sip::SipState) {
-        let tmp = ApplicableDeclarationsCacheQuery::new(self.declarations.as_slice());
-        tmp.hash(state);
-    }
-}
-
-struct ApplicableDeclarationsCacheQuery<'a> {
-    declarations: &'a [DeclarationBlock],
-}
-
-impl<'a> ApplicableDeclarationsCacheQuery<'a> {
-    fn new(declarations: &'a [DeclarationBlock]) -> ApplicableDeclarationsCacheQuery<'a> {
-        ApplicableDeclarationsCacheQuery {
-            declarations: declarations,
-        }
-    }
-}
-
-impl<'a> Equiv<ApplicableDeclarationsCacheEntry> for ApplicableDeclarationsCacheQuery<'a> {
-    fn equiv(&self, other: &ApplicableDeclarationsCacheEntry) -> bool {
-        if self.declarations.len() != other.declarations.len() {
-            return false
-        }
-        for (this, other) in self.declarations.iter().zip(other.declarations.iter()) {
-            if !arc_ptr_eq(&this.declarations, &other.declarations) {
-                return false
-            }
-        }
-        return true
-    }
-}
-
-
-impl<'a> Hash for ApplicableDeclarationsCacheQuery<'a> {
     fn hash(&self, state: &mut sip::SipState) {
         for declaration in self.declarations.iter() {
             let ptr: uint = unsafe {
@@ -128,7 +103,7 @@ impl ApplicableDeclarationsCache {
     }
 
     fn find(&self, declarations: &[DeclarationBlock]) -> Option<Arc<ComputedValues>> {
-        match self.cache.find_equiv(&ApplicableDeclarationsCacheQuery::new(declarations)) {
+        match self.cache.get(declarations) {
             None => None,
             Some(ref values) => Some((*values).clone()),
         }

@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+use std::borrow::BorrowFrom;
 use std::collections::HashMap;
 use std::collections::hash_map::{Occupied, Vacant};
 use rand::Rng;
@@ -160,15 +161,18 @@ impl<K:Clone+PartialEq+Hash,V:Clone> SimpleHashCache<K,V> {
     }
 
     #[inline]
-    fn bucket_for_key<Q:Hash>(&self, key: &Q) -> uint {
+    fn bucket_for_key<Sized? Q: Hash>(&self, key: &Q) -> uint {
         self.to_bucket(sip::hash_with_keys(self.k0, self.k1, key) as uint)
     }
 
     #[inline]
-    pub fn find_equiv<'a,Q:Hash+Equiv<K>>(&'a self, key: &Q) -> Option<&'a V> {
+    pub fn get<'a, Sized? Q>(&'a self, key: &Q) -> Option<&'a V>
+        where Q: Hash + Eq + BorrowFrom<K>
+    {
         let bucket_index = self.bucket_for_key(key);
         match self.entries[bucket_index] {
-            Some((ref existing_key, ref value)) if key.equiv(existing_key) => Some(value),
+            Some((ref existing_key, ref value))
+            if BorrowFrom::borrow_from(existing_key) == key => Some(value),
             _ => None,
         }
     }
