@@ -72,6 +72,17 @@ impl PartialEq for ApplicableDeclarationsCacheEntry {
     }
 }
 
+impl PartialEq<[DeclarationBlock]> for ApplicableDeclarationsCacheEntry {
+    fn eq(&self, other: &[DeclarationBlock]) -> bool {
+        self.declarations
+            .iter()
+            .zip(other.iter())
+            .all(|(t, o)| arc_ptr_eq(&t.declarations, &o.declarations))
+    }
+}
+
+impl Eq<[DeclarationBlock]> for ApplicableDeclarationsCacheEntry {}
+
 impl BorrowFrom<ApplicableDeclarationsCacheEntry> for [DeclarationBlock] {
     fn borrow_from(entry: &ApplicableDeclarationsCacheEntry) -> &[DeclarationBlock] {
         &*entry.declarations

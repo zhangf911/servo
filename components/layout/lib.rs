@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #![feature(globs, macro_rules, phase, thread_local, unsafe_destructor)]
+#![feature(default_type_params)]
 
 #![deny(unused_imports)]
 #![deny(unused_variables)]
